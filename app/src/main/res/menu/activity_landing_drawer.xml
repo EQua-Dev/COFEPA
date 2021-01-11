@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_web_24"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_payment"
+            android:icon="@drawable/ic_baseline_payments_24"
+            android:title="@string/menu_make_payment" />
+        <item
+            android:id="@+id/nav_verify"
+            android:icon="@drawable/ic_baseline_verified_24"
+            android:title="@string/menu_verify_payment" />
+    </group>
+
+    <item android:title="@string/menu_utilities">
+
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="@string/menu_settings" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_baseline_exit_to_app_24"
+                android:title="@string/menu_logout" />
+        </menu>
+
+    </item>
+</menu>

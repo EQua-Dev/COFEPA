@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.models.User
-import com.androidstrike.cofepa.utils.login
 import com.androidstrike.cofepa.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -28,9 +27,11 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
 
-    var departmentsArray = arrayOf("Accounting", "Computer Science", "Economics", "Mass Communication")
+    var departmentsArray = arrayOf("Accounting", "ComputerScience", "Economics", "MassCommunication")
+    var levelsArray = arrayOf("100L", "200L", "300L", "400L")
 //        R.array.departments
     val NEW_SPINNER_ID = 1
+    val NEW_SPINNER2_ID = 2
 
     //    a firebase auth object is created to enable us create a user in the firebase console
 //    we have the lateinit var called mAuth where we store the instance of the FirebaseAuth
@@ -40,8 +41,11 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
     private var userId:String?=null
     private var emailAddress:String?=null
+    lateinit var spinner_dept_text:String
+    lateinit var spinner_level_text:String
 
     var stud_dept:String?=null
+    var stud_level:String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +57,7 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        var aa = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, departmentsArray)
+        val aa = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, departmentsArray)
 
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(spinner_department){
@@ -71,10 +75,26 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
         ll.setMargins(10, 40, 10, 10)
         layout_sign_up.addView(spinner)
 
+        val da = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_item, levelsArray)
+        with(spinner_level){
+            adapter = da
+            setSelection(0, true)
+            onItemSelectedListener = this@SignUp
+            prompt = "Select Student Level"
+            gravity = Gravity.CENTER
+        }
+
+        val spinLev = Spinner(context)
+        spinLev.id = NEW_SPINNER2_ID
+
+        val ll2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        ll2.setMargins(10, 40, 10, 10)
+        layout_sign_up.addView(spinLev)
+
 //        here we initialize the instance of the Firebase Auth
         mAuth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
-        table_user = database.getReference("Users")
+        table_user = database.getReference().child("Users")
 
         button_sign_up.setOnClickListener {
            val email = et_new_email.text.toString().trim()
@@ -131,7 +151,6 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
         mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
-                activity?.pb_sign_up?.visibility = View.GONE
                 if (it.isSuccessful){
                     //Registration success
                     //we call the login function from the helper class
@@ -140,14 +159,22 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
                     userId = user!!.uid
                     emailAddress = user.email
 
-                    val newUser = User(et_new_user_name.text.toString(),emailAddress.toString(), stud_dept.toString() ,et_new_phone_number.text.toString())
+                    val newUser = User(et_new_user_name.text.toString(),emailAddress.toString(),stud_level.toString(), stud_dept.toString() ,et_new_phone_number.text.toString())
                     table_user.child(userId!!).setValue(newUser)
-                    //todo add department argument
-                    activity?.login()
+//                    Common.student_name = et_new_user_name.text.toString()
+//                    Common.student_department = spinner_text.toString()
+                    activity?.pb_sign_up?.visibility = View.GONE
+//                    activity?.login()
+                    val fragment = SignIn()
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
+                        ?.commit()
                 }else{
 //                we show the error message from the attempted registration
 //                we set the exception message to be non nullable
                     it.exception?.message?.let {
+                        activity?.pb_sign_up?.visibility = View.GONE
+
 //                    we call the toast function from the helper class
                         activity?.toast(it)
                     }
@@ -156,24 +183,24 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
             }
 
-    override fun onStart() {
-        super.onStart()
-        // if the current user is already signed in onStart of the application, the login function is called
-        mAuth.currentUser?.let {
-            activity?.login()
-        }
-    }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val spinner_text = parent?.getItemAtPosition(position).toString()
-        stud_dept = spinner_text
-        when(view?.id){
-            1 -> activity?.toast(departmentsArray[position])
 
+        if (parent?.id == R.id.spinner_department){
+            spinner_dept_text = parent.getItemAtPosition(position).toString()
+            stud_dept = spinner_dept_text
+        }else if (parent?.id == R.id.spinner_level){
+            spinner_level_text = parent.getItemAtPosition(position).toString()
+            stud_level = spinner_level_text
         }
 
-    }
 
+//        activity?.toast(spinner_dept_text)
+//        when(view?.id){
+//            1 -> activity?.toast(departmentsArray[position])
+//            2 -> activity?.toast(levelsArray[position])
+
+        }
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
     }

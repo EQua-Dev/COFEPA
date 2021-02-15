@@ -34,10 +34,6 @@ class Landing : AppCompatActivity() {
         setContentView(R.layout.activity_landing)
 
         setSupportActionBar(toolbar)
-//
-//        val toggle = ActionBarDrawerToggle(
-//            this,
-//        )
 
         val navController = Navigation.findNavController(this, R.id.fragment_container)
 

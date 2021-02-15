@@ -1,15 +1,24 @@
 package com.androidstrike.cofepa.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidstrike.cofepa.R
+import com.androidstrike.cofepa.models.Fees
+import com.androidstrike.cofepa.models.User
+import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.login
 import com.androidstrike.cofepa.utils.toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignIn : Fragment() {
@@ -17,7 +26,8 @@ class SignIn : Fragment() {
 
     //    a firebase auth object is created to enable us create a user in the firebase console
 //    we have the lateinit var called mAuth where we store the instance of the FirebaseAuth
-    private lateinit var mAuth: FirebaseAuth
+    private var mAuth: FirebaseAuth? = null
+    private var firebaseUser: FirebaseUser? = null
 
 
     override fun onCreateView(
@@ -31,9 +41,11 @@ class SignIn : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        Log.d("EQUA", "onActivityCreated: ")
 
 //        here we initialize the instance of the Firebase Auth
         mAuth = FirebaseAuth.getInstance()
+        firebaseUser = mAuth!!.currentUser
 
         button_sign_in.setOnClickListener {
             val email = et_email.text.toString().trim()
@@ -84,12 +96,17 @@ class SignIn : Fragment() {
         progress_sign_in.visibility = View.VISIBLE
 
         //todo check if the username exists in the realtime database then perform login
-        mAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                progress_sign_in.visibility = View.GONE
+        mAuth?.signInWithEmailAndPassword(email, password)
+            ?.addOnCompleteListener {
+
                 if (it.isSuccessful) {
                     //login success
+                    Common.currentUser = User(firebaseUser?.uid!!, firebaseUser!!.email)
                     activity?.login()
+
+                    progress_sign_in.visibility = View.GONE
+
+
                 } else {
                     it.exception?.message?.let {
                         activity?.toast(it)
@@ -97,13 +114,25 @@ class SignIn : Fragment() {
                 }
             }
 
-    }
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val usr_info = database.getReference("Users/${firebaseUser?.uid.toString()}")
+        var usrModel: User?
+        val usrInfoListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                usrModel = snapshot.getValue(User::class.java)
+                Common.student_department = usrModel!!.department
+                Log.d("EQUA", "onDataChange: ${Common.student_department}")
+                activity?.toast(Common.student_department)
+                Common.student_level = usrModel!!.level
+                Common.student_name = usrModel!!.name
+            }
 
-    override fun onStart() {
-        super.onStart()
-//         if the current user is already signed in onStart of the application, the login function is called
-        mAuth.currentUser?.let {
-            activity?.login()
+            override fun onCancelled(error: DatabaseError) {
+                activity?.toast("EWOOO!!!")
+            }
+
         }
+        usr_info.addListenerForSingleValueEvent(usrInfoListener)
+
     }
 }

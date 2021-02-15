@@ -33,6 +33,26 @@
 
     <string name="menu_utilities">Utilities</string>
 
+    <string name="items_to_pay">Items To Pay</string>
+    <string name="amount_due">Amount Due</string>
+    <string name="paying_total">Paying Total</string>
+
+    <string name="verify_yes">Verify</string>
+    <string name="verify_no"> Do Not Verify</string>
+
+    <string name="acceptance_fee">Acceptance</string>
+    <string name="accommodation_fee">Accommodation</string>
+    <string name="exam_fee">Exams</string>
+    <string name="hazard_fee">Hazard</string>
+    <string name="lib_equi_fee">Library and Equipment</string>
+    <string name="medic_treat_fee">Medical Treatment</string>
+    <string name="psa_fee">PSA</string>
+    <string name="portal_fee">Portal</string>
+    <string name="security_fee">Security</string>
+    <string name="sports_fee">Sports</string>
+    <string name="tuition_fee">Tuition</string>
+
+
     <string-array name="departments">
         <item>Accounting</item>
         <item>Computer Science</item>

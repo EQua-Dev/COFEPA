@@ -9,11 +9,10 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        if (savedInstanceState == null){
             val fragment = SignIn()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
                 .commit()
-        }
+
     }
 }

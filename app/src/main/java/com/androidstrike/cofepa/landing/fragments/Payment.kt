@@ -1,34 +1,52 @@
 package com.androidstrike.cofepa.landing.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import com.androidstrike.cofepa.R
+import com.androidstrike.cofepa.models.Fees
+import com.androidstrike.cofepa.models.User
+import com.androidstrike.cofepa.utils.Common
+import com.androidstrike.cofepa.utils.toast
+import com.androidstrike.cofepa.viewholders.FeesViewHolder
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.fragment_payment.*
+import java.lang.StringBuilder
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class Payment : Fragment(), View.OnClickListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Payment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class Payment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    var adapter: FirebaseRecyclerAdapter<User, FeesViewHolder>? = null
+
+    lateinit var database: FirebaseDatabase
+    lateinit var query: DatabaseReference
+
+    var feesModel: Fees? = null
+    var checkedItemTotal = 0
+
+     var acceptanceFee: Int? = null
+    var accommodationFee: Int? = null
+    var examFee: Int? = null
+    var hazardFee: Int? = null
+    var libEquipFee: Int? = null
+    var medicFee: Int? = null
+    var psaFee: Int? = null
+    var portalFee: Int? = null
+    var securityFee: Int? = null
+    var sportsFee: Int? = null
+    var tuitionFee: Int? = null
+    var dueTotal: String? = null
+
+    //    lateinit var iFirebaseLoadDone: IFirebaseLoadDone
+    lateinit var selectedSemester: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +56,423 @@ class Payment : Fragment() {
         return inflater.inflate(R.layout.fragment_payment, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Payment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Payment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        showSemesterChooseAlert()
+
+        tv_stud_name.text = Common.student_name
+        tv_semester.text =  Common.student_department //"Economics"
+
+
+    }
+
+    private fun loadFeesCost() {
+        database = FirebaseDatabase.getInstance()
+//        query = database
+//            .getReference("Fees/${Common.student_department}/$selectedSemester")
+
+        query = database
+            .getReference().child("Fees/${Common.student_department}/$selectedSemester")
+
+
+        val feesListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+//                feesModel = snapshot.value(Fees())
+                feesModel = snapshot.getValue(Fees::class.java)
+
+                pb_payment.visibility = View.GONE
+
+                if (selectedSemester == "Second") {
+                    layout_acceptance.visibility = View.GONE
+                    layout_exam.visibility = View.GONE
+                    layout_hazard.visibility = View.GONE
+                    layout_medic.visibility = View.GONE
+                    layout_security.visibility = View.GONE
+                    layout_sports.visibility = View.GONE
+                    tv_fee_accommodation.text = feesModel!!.accommodation
+                    tv_fee_lib_equip.text = feesModel?.libraryEquipment
+                    tv_fee_psa.text = feesModel?.psa
+                    tv_fee_portal.text = feesModel?.portal
+                    tv_due_total.text = feesModel?.total
+                    tv_fee_tuition.text = feesModel?.tuition
+
+                    dueTotal = tv_due_total.text.toString()
+
+                    accommodationFee = tv_fee_accommodation.text.toString().toInt()
+                    libEquipFee = tv_fee_lib_equip.text.toString().toInt()
+                    psaFee = tv_fee_psa.text.toString().toInt()
+                    portalFee = tv_fee_portal.text.toString().toInt()
+                    tuitionFee = tv_fee_tuition.text.toString().toInt()
+
+
+                } else {
+
+                    tv_fee_acceptance.text = feesModel?.acceptance
+                    tv_fee_accommodation.text = feesModel?.accommodation
+                    tv_fee_exam.text = feesModel?.exams
+                    tv_fee_hazard.text = feesModel?.hazard
+                    tv_fee_lib_equip.text = feesModel?.libraryEquipment
+                    tv_fee_medic.text = feesModel?.medicalTreatment
+                    tv_fee_psa.text = feesModel?.psa
+                    tv_fee_portal.text = feesModel?.portal
+                    tv_fee_security.text = feesModel?.security
+                    tv_fee_sports.text = feesModel?.sports
+                    tv_due_total.text = feesModel?.total
+                    tv_fee_tuition.text = feesModel?.tuition
+
+                    dueTotal = tv_due_total.text.toString()
+
+                    acceptanceFee = tv_fee_acceptance.text.toString().toInt()
+                    accommodationFee = tv_fee_accommodation.text.toString().toInt()
+                    examFee = tv_fee_exam.text.toString().toInt()
+                    hazardFee = tv_fee_hazard.text.toString().toInt()
+                    libEquipFee = tv_fee_lib_equip.text.toString().toInt()
+                    medicFee = tv_fee_medic.text.toString().toInt()
+                    psaFee = tv_fee_psa.text.toString().toInt()
+                    portalFee = tv_fee_portal.text.toString().toInt()
+                    securityFee = tv_fee_security.text.toString().toInt()
+                    sportsFee = tv_fee_sports.text.toString().toInt()
+                    tuitionFee = tv_fee_tuition.text.toString().toInt()
+
+
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                activity?.toast(error.message)
+            }
+
+        }
+        query.addListenerForSingleValueEvent(feesListener)
+
+//        showCheckedTotal()
+        Log.d("EQUA", "showCheckedTotal: called")
+
+        layout_acceptance.setOnClickListener(this)
+        layout_accommodation.setOnClickListener(this)
+        layout_exam.setOnClickListener(this)
+        layout_hazard.setOnClickListener(this)
+        layout_lib_equip.setOnClickListener(this)
+        layout_medic.setOnClickListener(this)
+        layout_psa.setOnClickListener(this)
+        layout_portal.setOnClickListener(this)
+        layout_security.setOnClickListener(this)
+        layout_sports.setOnClickListener(this)
+        layout_tuition.setOnClickListener(this)
+
+
+    }
+
+    override fun onClick(v: View?) {
+//        var acceptanceFee: Int? = tv_fee_acceptance.text.toString().toInt()
+//        var accommodationFee: Int? = tv_fee_accommodation.text.toString().toInt()
+//        var examFee: Int? = tv_fee_exam.text.toString().toInt()
+//        var hazardFee: Int? = tv_fee_hazard.text.toString().toInt()
+//        var libEquipFee: Int? = tv_fee_lib_equip.text.toString().toInt()
+//        var medicFee: Int? = tv_fee_medic.text.toString().toInt()
+//        var psaFee: Int? = tv_fee_psa.text.toString().toInt()
+//        var portalFee: Int? = tv_fee_portal.text.toString().toInt()
+//        var securityFee: Int? = tv_fee_security.text.toString().toInt()
+//        var sportsFee: Int? = tv_fee_sports.text.toString().toInt()
+//        var tuitionFee: Int? = tv_fee_tuition.text.toString().toInt()
+
+        when (v) {
+            layout_acceptance -> {
+                if (!cb_acceptance.isChecked) {
+                    cb_acceptance.isChecked = true
+//                    Log.d("EQUA", "showCheckedTotal: ${cb_acceptance.text}")
+                    if (acceptanceFee != null) {
+                        checkedItemTotal += acceptanceFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_acceptance.text.toString(), acceptanceFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_acceptance.isChecked = false
+                    if (acceptanceFee != null) {
+                        checkedItemTotal -= acceptanceFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
             }
+            layout_accommodation -> {
+                if (!cb_accommodation.isChecked) {
+                    cb_accommodation.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_accommodation.text}")
+                    if (accommodationFee != null) {
+                        checkedItemTotal += accommodationFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_accommodation.text.toString(), accommodationFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_accommodation.isChecked = false
+                    if (accommodationFee != null) {
+                        checkedItemTotal -= accommodationFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_exam -> {
+                if (!cb_exams.isChecked) {
+                    cb_exams.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_exams.text}")
+                    if (examFee != null) {
+                        checkedItemTotal += examFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_exams.text.toString(), examFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_exams.isChecked = false
+                    if (examFee != null) {
+                        checkedItemTotal -= examFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_hazard -> {
+                if (!cb_hazard.isChecked) {
+                    cb_hazard.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_hazard.text}")
+                    if (hazardFee != null) {
+                        checkedItemTotal += hazardFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_hazard.text.toString(), hazardFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_hazard.isChecked = false
+                    if (hazardFee != null) {
+                        checkedItemTotal -= hazardFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_lib_equip -> {
+                if (!cb_lib.isChecked) {
+                    cb_lib.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_lib.text}")
+                    if (libEquipFee != null) {
+                        checkedItemTotal += libEquipFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_lib_and_equip.text.toString(), libEquipFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_lib.isChecked = false
+                    if (libEquipFee != null) {
+                        checkedItemTotal -= libEquipFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_medic -> {
+                if (!cb_medic.isChecked) {
+                    cb_medic.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_medic.text}")
+                    if (medicFee != null) {
+                        checkedItemTotal += medicFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_med_treat.text.toString(), medicFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_medic.isChecked = false
+                    if (medicFee != null) {
+                        checkedItemTotal -= medicFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_psa -> {
+                if (!cb_psa.isChecked) {
+                    cb_psa.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_psa.text}")
+                    if (psaFee != null) {
+                        checkedItemTotal += psaFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_psa.text.toString(), psaFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_psa.isChecked = false
+                    if (psaFee != null) {
+                        checkedItemTotal -= psaFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_portal -> {
+                if (!cb_portal.isChecked) {
+                    cb_portal.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_portal.text}")
+                    if (portalFee != null) {
+                        checkedItemTotal += portalFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_portal.text.toString(), portalFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_portal.isChecked = false
+                    if (portalFee != null) {
+                        checkedItemTotal -= portalFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_security -> {
+                if (!cb_security.isChecked) {
+                    cb_security.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_security.text}")
+                    if (securityFee != null) {
+                        checkedItemTotal += securityFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_security.text.toString(), securityFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_security.isChecked = false
+                    if (securityFee != null) {
+                        checkedItemTotal -= securityFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_sports -> {
+                if (!cb_sports.isChecked) {
+                    cb_sports.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_sports.text}")
+                    if (sportsFee != null) {
+                        checkedItemTotal += sportsFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_sports.text.toString(), sportsFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_sports.isChecked = false
+                    if (sportsFee != null) {
+                        checkedItemTotal -= sportsFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+            layout_tuition -> {
+                if (!cb_tuition.isChecked) {
+                    cb_tuition.isChecked = true
+                    Log.d("EQUA", "showCheckedTotal: ${cb_tuition.text}")
+                    if (tuitionFee != null) {
+                        checkedItemTotal += tuitionFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                        Common.feeToPayHash?.put(txt_tuition.text.toString(), tuitionFee!!)
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                } else {
+                    cb_tuition.isChecked = false
+                    if (tuitionFee != null) {
+                        checkedItemTotal -= tuitionFee!!
+                        tv_paying_fee.text = "$checkedItemTotal"
+                    }
+                    activity?.toast("${checkedItemTotal.toString()} Checked")
+                }
+            }
+
+//            else -> {
+//                activity?.toast("$checkedItemTotal")
+//            }
+
+        }
+
+        btn_pay.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Confirm Amount to Pay")
+
+            val stringBuilder = StringBuilder()
+            stringBuilder.append("Confirm Amount to Pay")
+            Common.feeToPayHash?.forEach {
+                stringBuilder.append("\n${String()} : ${Int}")
+            }
+            stringBuilder.append("Total: $checkedItemTotal")
+
+            builder.setPositiveButton("Confirm", DialogInterface.OnClickListener { dialog, which ->
+
+                val frag_rave = FlutterWave()
+
+                val bundle = Bundle()
+                bundle.putInt("totalFee", checkedItemTotal)
+                bundle.putString("payingSemester", selectedSemester)
+                bundle.putString("totalDue", dueTotal)
+                frag_rave.arguments = bundle
+
+                val manager = fragmentManager
+
+                val frag_transaction = manager?.beginTransaction()
+
+                frag_transaction?.replace(R.id.fragment_container, frag_rave)
+                frag_transaction?.commit()
+
+
+            })
+
+            builder.setNegativeButton("Cancel", null)
+            builder.show()
+        }
+    }
+
+    var checkedItem = -1
+
+    private fun showSemesterChooseAlert() {
+        val semesters = arrayOf("First", "Second")
+//        for (semester in semesters) {
+//            checkedItem = semesters.indexOf(semester)
+//        }
+
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Select Semester to Pay")
+        builder.setSingleChoiceItems(
+            semesters,
+            checkedItem,
+            DialogInterface.OnClickListener { dialog, which ->
+                //user checked item
+                checkedItem = which
+                for (semester in semesters) {
+//                activity?.toast(checkedItem.toString())
+                    if (checkedItem == 0) selectedSemester = "First"
+                    else if (checkedItem == 1) selectedSemester = "Second"
+                    activity?.toast(selectedSemester.toString())
+//                selectedSemester = semester
+                }
+//                selectedSemester = getString(checkedItem)//checkedItem.toString() //
+//            activity?.toast(selectedSemester!!)
+            })
+        builder.setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which ->
+
+            pb_payment.visibility = View.VISIBLE
+            loadFeesCost()
+
+        })
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
     }
 }

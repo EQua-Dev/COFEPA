@@ -1,10 +1,10 @@
-package com.androidstrike.cofepa
+package com.androidstrike.cofepa.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import com.androidstrike.cofepa.auth.AuthActivity
+import com.androidstrike.cofepa.R
+import com.androidstrike.cofepa.ui.auth.AuthActivity
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 

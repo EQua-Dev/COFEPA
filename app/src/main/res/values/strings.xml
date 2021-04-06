@@ -52,6 +52,10 @@
     <string name="sports_fee">Sports</string>
     <string name="tuition_fee">Tuition</string>
 
+    <string name="custom_dialog_title">Confirm Fees Pay</string>
+    <string name="custom_edit_button">Edit</string>
+    <string name="custom_confirm_button">Confirm</string>
+
 
     <string-array name="departments">
         <item>Accounting</item>

@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.verify
+package com.androidstrike.cofepa.ui.verify
 
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.models.PaidFees
 import com.androidstrike.cofepa.utils.Common
-import com.androidstrike.cofepa.utils.Common.database
 import com.androidstrike.cofepa.utils.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_payment.*
 import kotlinx.android.synthetic.main.fragment_sub_verify.*
 
 class SubVerify : Fragment() {

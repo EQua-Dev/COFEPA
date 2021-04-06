@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.auth
+package com.androidstrike.cofepa.ui.auth
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

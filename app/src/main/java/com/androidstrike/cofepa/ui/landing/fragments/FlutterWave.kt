@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.landing.fragments
+package com.androidstrike.cofepa.ui.landing.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,7 +18,6 @@ import com.flutterwave.raveandroid.rave_java_commons.RaveConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_flutter_wave.*
 
 class FlutterWave : Fragment() {
 

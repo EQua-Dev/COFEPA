@@ -1,24 +1,40 @@
-package com.androidstrike.cofepa.landing.fragments
+package com.androidstrike.cofepa.ui.landing.fragments
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
+import android.util.ArrayMap
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.view.Window
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.androidstrike.cofepa.R
+import com.androidstrike.cofepa.adapters.FeesHashAdapter
 import com.androidstrike.cofepa.models.Fees
 import com.androidstrike.cofepa.models.User
+import com.androidstrike.cofepa.ui.CustomPrePaymentDialog
 import com.androidstrike.cofepa.utils.Common
+import com.androidstrike.cofepa.utils.Common.feeToPayHash
 import com.androidstrike.cofepa.utils.toast
 import com.androidstrike.cofepa.viewholders.FeesViewHolder
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.custom_pre_payment.*
 import kotlinx.android.synthetic.main.fragment_payment.*
 import java.lang.StringBuilder
+import java.text.NumberFormat
+import java.util.*
 
 class Payment : Fragment(), View.OnClickListener {
 
@@ -44,6 +60,8 @@ class Payment : Fragment(), View.OnClickListener {
     var tuitionFee: Int? = null
     var dueTotal: String? = null
 
+    var cstmTitle: String? = null
+
     //    lateinit var iFirebaseLoadDone: IFirebaseLoadDone
     lateinit var selectedSemester: String
 
@@ -59,6 +77,7 @@ class Payment : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        feeToPayHash.clear()
         showSemesterChooseAlert()
 
         tv_stud_name.text = Common.student_name
@@ -165,6 +184,7 @@ class Payment : Fragment(), View.OnClickListener {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
 //        var acceptanceFee: Int? = tv_fee_acceptance.text.toString().toInt()
 //        var accommodationFee: Int? = tv_fee_accommodation.text.toString().toInt()
@@ -186,7 +206,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (acceptanceFee != null) {
                         checkedItemTotal += acceptanceFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_acceptance.text.toString(), acceptanceFee!!)
+                        feeToPayHash[txt_acceptance.text.toString()] = acceptanceFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -194,6 +214,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (acceptanceFee != null) {
                         checkedItemTotal -= acceptanceFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_acceptance.text.toString(), acceptanceFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -205,7 +226,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (accommodationFee != null) {
                         checkedItemTotal += accommodationFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_accommodation.text.toString(), accommodationFee!!)
+                        feeToPayHash[txt_accommodation.text.toString()] = accommodationFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -213,6 +234,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (accommodationFee != null) {
                         checkedItemTotal -= accommodationFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_accommodation.text.toString(), accommodationFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -225,7 +247,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (examFee != null) {
                         checkedItemTotal += examFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_exams.text.toString(), examFee!!)
+                        feeToPayHash[txt_exams.text.toString()] = examFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -233,6 +255,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (examFee != null) {
                         checkedItemTotal -= examFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_exams.text.toString(), examFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -245,7 +268,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (hazardFee != null) {
                         checkedItemTotal += hazardFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_hazard.text.toString(), hazardFee!!)
+                        feeToPayHash[txt_hazard.text.toString()] = hazardFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -253,6 +276,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (hazardFee != null) {
                         checkedItemTotal -= hazardFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_hazard.text.toString(), hazardFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -265,7 +289,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (libEquipFee != null) {
                         checkedItemTotal += libEquipFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_lib_and_equip.text.toString(), libEquipFee!!)
+                        feeToPayHash[txt_lib_and_equip.text.toString()] = libEquipFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -273,6 +297,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (libEquipFee != null) {
                         checkedItemTotal -= libEquipFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_lib_and_equip.text.toString(), libEquipFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -285,7 +310,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (medicFee != null) {
                         checkedItemTotal += medicFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_med_treat.text.toString(), medicFee!!)
+                        feeToPayHash[txt_med_treat.text.toString()] = medicFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -293,6 +318,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (medicFee != null) {
                         checkedItemTotal -= medicFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_med_treat.text.toString(), medicFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -305,7 +331,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (psaFee != null) {
                         checkedItemTotal += psaFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_psa.text.toString(), psaFee!!)
+                        feeToPayHash[txt_psa.text.toString()] = psaFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -313,6 +339,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (psaFee != null) {
                         checkedItemTotal -= psaFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_psa.text.toString(), psaFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -325,7 +352,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (portalFee != null) {
                         checkedItemTotal += portalFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_portal.text.toString(), portalFee!!)
+                        feeToPayHash[txt_portal.text.toString()] = portalFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -333,6 +360,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (portalFee != null) {
                         checkedItemTotal -= portalFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_portal.text.toString(), portalFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -345,7 +373,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (securityFee != null) {
                         checkedItemTotal += securityFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_security.text.toString(), securityFee!!)
+                        feeToPayHash[txt_security.text.toString()] = securityFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -353,6 +381,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (securityFee != null) {
                         checkedItemTotal -= securityFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_security.text.toString(), securityFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -365,7 +394,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (sportsFee != null) {
                         checkedItemTotal += sportsFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_sports.text.toString(), sportsFee!!)
+                        feeToPayHash[txt_sports.text.toString()] = sportsFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -373,6 +402,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (sportsFee != null) {
                         checkedItemTotal -= sportsFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_sports.text.toString(), sportsFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -385,7 +415,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (tuitionFee != null) {
                         checkedItemTotal += tuitionFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        Common.feeToPayHash?.put(txt_tuition.text.toString(), tuitionFee!!)
+                        feeToPayHash[txt_tuition.text.toString()] = tuitionFee!!
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 } else {
@@ -393,6 +423,7 @@ class Payment : Fragment(), View.OnClickListener {
                     if (tuitionFee != null) {
                         checkedItemTotal -= tuitionFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
+                        feeToPayHash.remove(txt_tuition.toString(), tuitionFee!!)
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -405,20 +436,50 @@ class Payment : Fragment(), View.OnClickListener {
         }
 
         btn_pay.setOnClickListener {
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle("Confirm Amount to Pay")
 
-            val stringBuilder = StringBuilder()
-            stringBuilder.append("Confirm Amount to Pay")
-            Common.feeToPayHash?.forEach {
-                stringBuilder.append("\n${String()} : ${Int}")
-            }
-            stringBuilder.append("Total: $checkedItemTotal")
+//            for (key in feeToPayHash.keys){
+//                println("$key : ${feeToPayHash[key]}")
+//            }
+//            Log.d("EQUA", "onClickMain: $feeToPayHash  \n")
 
-            builder.setPositiveButton("Confirm", DialogInterface.OnClickListener { dialog, which ->
+            showConfirmDialog()
+//            builder.show()
+        }
+    }
 
-                val frag_rave = FlutterWave()
+//    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    private fun showConfirmDialog() {
 
+    val hashAdapter: FeesHashAdapter
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawableResource(R.drawable.custom_dialog_design)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_pre_payment)
+//        val title = dialog.findViewById(R.id.custom_text_title) as TextView
+//        title.text = title
+        val customListView = dialog.findViewById(R.id.rv_confirm_items) as RecyclerView
+    val customTotalText = dialog.findViewById(R.id.tv_total_confirm) as TextView
+
+    val locale: Locale = Locale("en", "NG")
+    val fmt: NumberFormat = NumberFormat.getCurrencyInstance(locale)
+
+    customTotalText.append("Total: " +fmt.format(checkedItemTotal).toString())
+//    val txtFees = dialog.findViewById(R.id.txt_fee) as TextView
+
+    hashAdapter = FeesHashAdapter()
+    customListView.adapter = hashAdapter
+    customListView.layoutManager = LinearLayoutManager(activity)
+
+
+
+        val yesBtn = dialog.findViewById(R.id.btn_pre_pay_confirm) as Button
+        val noBtn = dialog.findViewById(R.id.btn_pre_pay_edit) as Button
+
+        yesBtn.setOnClickListener {
+            val frag_rave = FlutterWave()
+//
                 val bundle = Bundle()
                 bundle.putInt("totalFee", checkedItemTotal)
                 bundle.putString("payingSemester", selectedSemester)
@@ -431,13 +492,11 @@ class Payment : Fragment(), View.OnClickListener {
 
                 frag_transaction?.replace(R.id.fragment_container, frag_rave)
                 frag_transaction?.commit()
-
-
-            })
-
-            builder.setNegativeButton("Cancel", null)
-            builder.show()
         }
+        noBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     var checkedItem = -1

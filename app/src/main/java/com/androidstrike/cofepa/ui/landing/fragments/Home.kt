@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.landing.fragments
+package com.androidstrike.cofepa.ui.landing.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.interfaces.IOnBackPressed

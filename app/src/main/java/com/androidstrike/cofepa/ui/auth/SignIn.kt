@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.auth
+package com.androidstrike.cofepa.ui.auth
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidstrike.cofepa.R
-import com.androidstrike.cofepa.models.Fees
 import com.androidstrike.cofepa.models.User
 import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.login

@@ -3,8 +3,8 @@ package com.androidstrike.cofepa.utils
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.androidstrike.cofepa.auth.AuthActivity
-import com.androidstrike.cofepa.landing.Landing
+import com.androidstrike.cofepa.ui.auth.AuthActivity
+import com.androidstrike.cofepa.ui.landing.Landing
 
 fun Context.toast(message:String) =
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

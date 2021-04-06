@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.auth
+package com.androidstrike.cofepa.ui.auth
 
 import android.os.Bundle
 import android.util.Patterns

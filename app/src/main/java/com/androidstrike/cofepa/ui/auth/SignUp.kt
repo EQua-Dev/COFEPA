@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.auth
+package com.androidstrike.cofepa.ui.auth
 
 import android.os.Bundle
 import android.util.Patterns
@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
  * Use the [SignUp.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
 

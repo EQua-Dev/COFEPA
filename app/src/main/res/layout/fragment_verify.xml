@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".landing.fragments.Verify">
+    tools:context=".ui.landing.fragments.Verify">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_title"

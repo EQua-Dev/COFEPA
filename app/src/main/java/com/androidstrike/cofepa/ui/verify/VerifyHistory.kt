@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.verify
+package com.androidstrike.cofepa.ui.verify
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

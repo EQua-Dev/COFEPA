@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.androidstrike.cofepa.verify.SubVerify
-import com.androidstrike.cofepa.verify.VerifyHistory
+import com.androidstrike.cofepa.ui.verify.SubVerify
+import com.androidstrike.cofepa.ui.verify.VerifyHistory
 
 class MyPagerAdapter(
     var context: FragmentActivity?,

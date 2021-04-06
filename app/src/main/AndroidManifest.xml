@@ -12,12 +12,12 @@
         android:theme="@style/Theme.COFEPA"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".landing.Landing"
+            android:name="com.androidstrike.cofepa.ui.landing.Landing"
             android:label="@string/title_activity_landing"
             android:theme="@style/Theme.COFEPA.NoActionBar"></activity>
-        <activity android:name=".auth.AuthActivity" />
+        <activity android:name="com.androidstrike.cofepa.ui.auth.AuthActivity" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".ui.SplashScreen"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

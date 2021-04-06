@@ -1,4 +1,4 @@
-package com.androidstrike.cofepa.landing.fragments
+package com.androidstrike.cofepa.ui.landing.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import androidx.viewpager.widget.ViewPager
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.adapters.MyPagerAdapter
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_verify.*
 
 class Verify : Fragment() {
 

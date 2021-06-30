@@ -482,13 +482,11 @@
 
 
         </androidx.cardview.widget.CardView>
-
-        <ProgressBar
+        <include
             android:id="@+id/pb_payment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible" />
+            android:visibility="gone"
+            layout="@layout/pb_layout"/>
+
     </RelativeLayout>
 
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="#fff"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        android:weightSum="8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:padding="4dp"
+            android:layout_margin="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:padding="2dp"
+                android:fontFamily="monospace"
+                android:id="@+id/txt_semester"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Due: "
+                android:textColor="@color/black"
+                android:padding="2dp"
+                android:fontFamily="monospace"
+                android:id="@+id/txt_total_due"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Paid: "
+                android:textColor="@color/black"
+                android:padding="2dp"
+                android:fontFamily="monospace"
+                android:id="@+id/txt_total_paid"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Owing: "
+                android:textColor="@color/black"
+                android:padding="2dp"
+                android:fontFamily="monospace"
+                android:id="@+id/txt_total_owing"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="3">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verify"
+                android:id="@+id/btn_verify"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not Verified"
+                android:textStyle="italic"
+                android:layout_below="@id/btn_verify"
+                android:layout_marginTop="12dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/txt_cleared"
+                app:drawableStartCompat="@drawable/ic_not_cleared"
+                app:drawableLeftCompat="@drawable/ic_not_cleared" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

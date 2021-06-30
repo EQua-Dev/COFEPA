@@ -133,11 +133,9 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="8dp"/>
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:id="@+id/pb_sign_up"/>
+    <include
+        android:id="@+id/pb_sign_up"
+        android:visibility="gone"
+        layout="@layout/pb_layout"/>
 
 </RelativeLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_margin="8dp"
+android:background="#fff"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+app:cardElevation="4dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="4dp"
+    android:weightSum="8">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:padding="4dp"
+        android:layout_margin="4dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="2dp"
+            android:fontFamily="monospace"
+            android:id="@+id/txt_history_semester"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Due: "
+            android:textColor="@color/black"
+            android:padding="2dp"
+            android:fontFamily="monospace"
+            android:id="@+id/txt_history_total_due"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Paid: "
+            android:textColor="@color/black"
+            android:padding="2dp"
+            android:fontFamily="monospace"
+            android:id="@+id/txt_history_total_paid"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_weight="3">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Ref Code"
+            android:id="@+id/btn_history"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+</LinearLayout>
+</androidx.cardview.widget.CardView>

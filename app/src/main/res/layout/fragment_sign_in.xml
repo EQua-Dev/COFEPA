@@ -97,13 +97,19 @@
             android:layout_below="@id/tv_new_account"/>
 
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/progress_sign_in"/>
+<!--        <ProgressBar-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:visibility="invisible"-->
+<!--            android:id="@+id/progress_sign_in"/>-->
 
 
     </RelativeLayout>
+
+    <include
+        android:id="@+id/pb_sign_in"
+        android:visibility="gone"
+        layout="@layout/pb_layout"/>
 
 </LinearLayout>

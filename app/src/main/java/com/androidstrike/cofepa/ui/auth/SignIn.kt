@@ -1,5 +1,6 @@
 package com.androidstrike.cofepa.ui.auth
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.models.User
 import com.androidstrike.cofepa.utils.Common
@@ -27,6 +29,8 @@ class SignIn : Fragment() {
 //    we have the lateinit var called mAuth where we store the instance of the FirebaseAuth
     private var mAuth: FirebaseAuth? = null
     private var firebaseUser: FirebaseUser? = null
+
+    lateinit var progressDialog: ProgressDialog
 
 
     override fun onCreateView(
@@ -71,28 +75,35 @@ class SignIn : Fragment() {
                 et_password.requestFocus()
                 return@setOnClickListener
             }
-
+//
+//            progressDialog = ProgressDialog(requireContext())
+//            progressDialog.setTitle("Loading")
+//            progressDialog.setMessage("Please wait...")
+//            progressDialog.show()
+            pb_sign_in.visibility = View.VISIBLE
             loginUser(email, password)
+
         }
 
         tv_new_account.setOnClickListener {
-            val fragment = SignUp()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
-                ?.commit()
+            findNavController().navigate(R.id.action_signIn_to_signUp)
+//            val fragment = SignUp()
+//            activity?.supportFragmentManager?.beginTransaction()
+//                ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
+//                ?.commit()
         }
 
         tv_forgot_password.setOnClickListener {
+            findNavController().navigate(R.id.action_signIn_to_passwordReset)
             val frag = PasswordReset()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.auth_frame, frag, frag.javaClass.simpleName)
-                ?.commit()
+//            activity?.supportFragmentManager?.beginTransaction()
+//                ?.replace(R.id.auth_frame, frag, frag.javaClass.simpleName)
+//                ?.commit()
         }
 
     }
 
     private fun loginUser(email: String, password: String) {
-        progress_sign_in.visibility = View.VISIBLE
 
         //todo check if the username exists in the realtime database then perform login
         mAuth?.signInWithEmailAndPassword(email, password)
@@ -100,38 +111,37 @@ class SignIn : Fragment() {
 
                 if (it.isSuccessful) {
                     //login success
-                    Common.currentUser = User(firebaseUser?.uid!!, firebaseUser!!.email)
+                    Common.currentUser = User(firebaseUser?.uid!!, firebaseUser?.email)
+
+                    val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+                    val usr_info = database.getReference("Users/${firebaseUser?.uid.toString()}")
+                    var usrModel: User?
+                    val usrInfoListener = object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            usrModel = snapshot.getValue(User::class.java)
+
+                            Common.student_level = usrModel?.level.toString()
+                            Common.student_department = usrModel?.department.toString()
+
+                            Common.student_name = usrModel?.name.toString()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            activity?.toast("EWOOO!!!")
+                        }
+                    }
+                    usr_info.addListenerForSingleValueEvent(usrInfoListener)
+                    pb_sign_in.visibility = View.GONE
                     activity?.login()
 
-                    progress_sign_in.visibility = View.GONE
 
 
                 } else {
                     it.exception?.message?.let {
                         activity?.toast(it)
+                        pb_sign_in.visibility = View.GONE
                     }
                 }
             }
-
-        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-        val usr_info = database.getReference("Users/${firebaseUser?.uid.toString()}")
-        var usrModel: User?
-        val usrInfoListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                usrModel = snapshot.getValue(User::class.java)
-                Common.student_department = usrModel!!.department
-                Log.d("EQUA", "onDataChange: ${Common.student_department}")
-                activity?.toast(Common.student_department)
-                Common.student_level = usrModel!!.level
-                Common.student_name = usrModel!!.name
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                activity?.toast("EWOOO!!!")
-            }
-
-        }
-        usr_info.addListenerForSingleValueEvent(usrInfoListener)
-
     }
 }

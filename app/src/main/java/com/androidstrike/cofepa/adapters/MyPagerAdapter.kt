@@ -19,10 +19,10 @@ class MyPagerAdapter(
     override fun getItem(position: Int): Fragment {
         return when(position){
             0 ->{
-                SubVerify()
+                VerifyHistory()
             }
             1 ->{
-                VerifyHistory()
+                SubVerify()
             }else -> getItem(position)
         }
     }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_auth"
+    app:startDestination="@id/splash">
+
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.androidstrike.cofepa.ui.auth.SignIn"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signIn_to_signUp"
+            app:destination="@id/signUp"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
+        <action
+            android:id="@+id/action_signIn_to_passwordReset"
+            app:destination="@id/passwordReset"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.androidstrike.cofepa.ui.auth.SignUp"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUp_to_signIn"
+            app:destination="@id/signIn"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordReset"
+        android:name="com.androidstrike.cofepa.ui.auth.PasswordReset"
+        android:label="fragment_password_reset"
+        tools:layout="@layout/fragment_password_reset" >
+        <action
+            android:id="@+id/action_passwordReset_to_signIn"
+            app:destination="@id/signIn"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/splash"
+        android:name="com.androidstrike.cofepa.ui.auth.Splash"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splash_to_signIn"
+            app:destination="@id/signIn"
+            app:enterAnim="@anim/from_top"
+            app:exitAnim="@anim/to_down"
+            app:popEnterAnim="@anim/from_top"
+            app:popExitAnim="@anim/to_down" />
+    </fragment>
+</navigation>

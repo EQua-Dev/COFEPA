@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
+import androidx.navigation.fragment.findNavController
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.models.User
 import com.androidstrike.cofepa.utils.toast
@@ -127,8 +128,15 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
             }
             if (confirm_password != password) {
                 et_new_confirm_password.error = "Must Match With Password"
-            }else{
-
+            }
+            if (stud_dept == null){
+                activity?.toast("Please Select Department")
+            }
+            if (stud_level == null){
+                activity?.toast("Please Select Level")
+            }
+            else{
+                pb_sign_up.visibility = View.VISIBLE
                 registerUser(email, password)
 
             }
@@ -136,10 +144,11 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
         }
 
         tv_login_instead.setOnClickListener {
-            val fragment = SignIn()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
-                ?.commit()
+            findNavController().navigate(R.id.action_signUp_to_signIn)
+//            val fragment = SignIn()
+//            activity?.supportFragmentManager?.beginTransaction()
+//                ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
+//                ?.commit()
         }
         }
 
@@ -164,12 +173,13 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
                     table_user.child(userId!!).setValue(newUser)
 //                    Common.student_name = et_new_user_name.text.toString()
 //                    Common.student_department = spinner_text.toString()
-                    activity?.pb_sign_up?.visibility = View.GONE
+                    pb_sign_up.visibility = View.GONE
 //                    activity?.login()
-                    val fragment = SignIn()
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
-                        ?.commit()
+                    findNavController().navigate(R.id.action_signUp_to_signIn)
+//                    val fragment = SignIn()
+//                    activity?.supportFragmentManager?.beginTransaction()
+//                        ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
+//                        ?.commit()
                 }else{
 //                we show the error message from the attempted registration
 //                we set the exception message to be non nullable
@@ -178,6 +188,7 @@ class SignUp : Fragment(),AdapterView.OnItemSelectedListener {
 
 //                    we call the toast function from the helper class
                         activity?.toast(it)
+                        pb_sign_up.visibility = View.GONE
                     }
                 }
             }

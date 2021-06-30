@@ -38,7 +38,7 @@
     <string name="paying_total">Paying Total</string>
 
     <string name="verify_yes">Verify</string>
-    <string name="verify_no"> Do Not Verify</string>
+    <string name="verify_no"> Please Complete Your Fees First</string>
 
     <string name="acceptance_fee">Acceptance</string>
     <string name="accommodation_fee">Accommodation</string>
@@ -55,6 +55,8 @@
     <string name="custom_dialog_title">Confirm Fees Pay</string>
     <string name="custom_edit_button">Edit</string>
     <string name="custom_confirm_button">Confirm</string>
+    <string name="copy">Copy</string>
+    <string name="copy_instruction">Copy this code for verficiation</string>
 
 
     <string-array name="departments">

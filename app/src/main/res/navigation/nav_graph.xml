@@ -9,15 +9,35 @@
         android:id="@+id/nav_home"
         android:name="com.androidstrike.cofepa.ui.landing.fragments.Home"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_verify"
+            app:destination="@id/nav_verify" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_payment"
+            app:destination="@id/nav_payment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_payment"
         android:name="com.androidstrike.cofepa.ui.landing.fragments.Payment"
         android:label="@string/menu_make_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_nav_payment_to_flutterWave"
+            app:destination="@id/flutterWave" />
+    </fragment>
     <fragment
         android:id="@+id/nav_verify"
         android:name="com.androidstrike.cofepa.ui.landing.fragments.Verify"
         android:label="@string/menu_verify_payment"
         tools:layout="@layout/fragment_verify" />
+    <fragment
+        android:id="@+id/flutterWave"
+        android:name="com.androidstrike.cofepa.ui.landing.fragments.FlutterWave"
+        android:label="fragment_flutter_wave"
+        tools:layout="@layout/fragment_flutter_wave" >
+        <action
+            android:id="@+id/action_flutterWave_to_nav_verify"
+            app:destination="@id/nav_verify" />
+    </fragment>
 </navigation>

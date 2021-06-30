@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.util.ArrayMap
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,26 +12,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
-import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidstrike.cofepa.R
 import com.androidstrike.cofepa.adapters.FeesHashAdapter
 import com.androidstrike.cofepa.models.Fees
 import com.androidstrike.cofepa.models.User
-import com.androidstrike.cofepa.ui.CustomPrePaymentDialog
 import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.Common.feeToPayHash
 import com.androidstrike.cofepa.utils.toast
 import com.androidstrike.cofepa.viewholders.FeesViewHolder
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.custom_pre_payment.*
 import kotlinx.android.synthetic.main.fragment_payment.*
-import java.lang.StringBuilder
 import java.text.NumberFormat
 import java.util.*
 
@@ -181,23 +175,12 @@ class Payment : Fragment(), View.OnClickListener {
         layout_sports.setOnClickListener(this)
         layout_tuition.setOnClickListener(this)
 
+        pb_payment.visibility = View.GONE
 
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
-//        var acceptanceFee: Int? = tv_fee_acceptance.text.toString().toInt()
-//        var accommodationFee: Int? = tv_fee_accommodation.text.toString().toInt()
-//        var examFee: Int? = tv_fee_exam.text.toString().toInt()
-//        var hazardFee: Int? = tv_fee_hazard.text.toString().toInt()
-//        var libEquipFee: Int? = tv_fee_lib_equip.text.toString().toInt()
-//        var medicFee: Int? = tv_fee_medic.text.toString().toInt()
-//        var psaFee: Int? = tv_fee_psa.text.toString().toInt()
-//        var portalFee: Int? = tv_fee_portal.text.toString().toInt()
-//        var securityFee: Int? = tv_fee_security.text.toString().toInt()
-//        var sportsFee: Int? = tv_fee_sports.text.toString().toInt()
-//        var tuitionFee: Int? = tv_fee_tuition.text.toString().toInt()
-
         when (v) {
             layout_acceptance -> {
                 if (!cb_acceptance.isChecked) {
@@ -437,11 +420,6 @@ class Payment : Fragment(), View.OnClickListener {
 
         btn_pay.setOnClickListener {
 
-//            for (key in feeToPayHash.keys){
-//                println("$key : ${feeToPayHash[key]}")
-//            }
-//            Log.d("EQUA", "onClickMain: $feeToPayHash  \n")
-
             showConfirmDialog()
 //            builder.show()
         }
@@ -478,6 +456,7 @@ class Payment : Fragment(), View.OnClickListener {
         val noBtn = dialog.findViewById(R.id.btn_pre_pay_edit) as Button
 
         yesBtn.setOnClickListener {
+            dialog.dismiss()
             val frag_rave = FlutterWave()
 //
                 val bundle = Bundle()

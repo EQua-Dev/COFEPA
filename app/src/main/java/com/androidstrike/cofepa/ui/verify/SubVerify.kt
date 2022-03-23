@@ -24,6 +24,7 @@ import com.androidstrike.cofepa.adapters.VerifyHolder
 import com.androidstrike.cofepa.models.PaidFees
 import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.toast
+import com.androidstrike.cofepa.utils.visible
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -213,7 +214,7 @@ class SubVerify : Fragment() {
                                 })
                             }
                         } else {
-                            holder.btnVerify.isClickable = false
+                            holder.btnVerify.visible(false)
                             activity?.toast("Complete fees to be cleared")
                         }
                     } else {

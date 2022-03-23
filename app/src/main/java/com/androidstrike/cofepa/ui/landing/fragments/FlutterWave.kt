@@ -56,8 +56,10 @@ class FlutterWave : Fragment() {
     var owingTotal: Long? = null
 
     //    lateinit var ref: String
-    val publicKey = "FLWPUBK-2d6ccddd437ac5c89668bb3116f33ed5-X"
-    val encrypyKey = "884f53bff48591fe29facb22"
+//    val publicKey = "FLWPUBK-2d6ccddd437ac5c89668bb3116f33ed5-X"
+    val publicKey = "FLWPUBK_TEST-dca5b282ee6ee5004f09d4b0e7333701-X"
+//    val encrypyKey = "884f53bff48591fe29facb22"
+    val encrypyKey = "FLWSECK_TESTcf30319e5b08"
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: FirebaseDatabase

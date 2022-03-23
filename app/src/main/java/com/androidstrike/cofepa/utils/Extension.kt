@@ -2,6 +2,7 @@ package com.androidstrike.cofepa.utils
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import com.androidstrike.cofepa.ui.auth.AuthActivity
 import com.androidstrike.cofepa.ui.landing.Landing
@@ -25,4 +26,9 @@ fun Context.logout(){
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
     startActivity(intent)
+}
+
+//common function to handle progress bar visibility
+fun View.visible(isVisible: Boolean){
+    visibility = if (isVisible) View.VISIBLE else View.GONE
 }

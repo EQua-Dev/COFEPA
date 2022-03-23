@@ -14,6 +14,7 @@ import com.androidstrike.cofepa.models.User
 import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.login
 import com.androidstrike.cofepa.utils.toast
+import com.androidstrike.cofepa.utils.visible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -30,8 +31,6 @@ class SignIn : Fragment() {
     private var mAuth: FirebaseAuth? = null
     private var firebaseUser: FirebaseUser? = null
 
-    lateinit var progressDialog: ProgressDialog
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +43,6 @@ class SignIn : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Log.d("EQUA", "onActivityCreated: ")
 
 //        here we initialize the instance of the Firebase Auth
         mAuth = FirebaseAuth.getInstance()
@@ -69,43 +67,24 @@ class SignIn : Fragment() {
                 return@setOnClickListener
             }
 
-//            if the password contains less than 6 characters we display error message
-            if (password.isEmpty() || password.length < 6) {
-                et_password.error = "6 char password required"
-                et_password.requestFocus()
-                return@setOnClickListener
-            }
-//
-//            progressDialog = ProgressDialog(requireContext())
-//            progressDialog.setTitle("Loading")
-//            progressDialog.setMessage("Please wait...")
-//            progressDialog.show()
-            pb_sign_in.visibility = View.VISIBLE
             loginUser(email, password)
 
         }
 
         tv_new_account.setOnClickListener {
             findNavController().navigate(R.id.action_signIn_to_signUp)
-//            val fragment = SignUp()
-//            activity?.supportFragmentManager?.beginTransaction()
-//                ?.replace(R.id.auth_frame, fragment, fragment.javaClass.simpleName)
-//                ?.commit()
+
         }
 
         tv_forgot_password.setOnClickListener {
             findNavController().navigate(R.id.action_signIn_to_passwordReset)
-            val frag = PasswordReset()
-//            activity?.supportFragmentManager?.beginTransaction()
-//                ?.replace(R.id.auth_frame, frag, frag.javaClass.simpleName)
-//                ?.commit()
+
         }
 
     }
 
     private fun loginUser(email: String, password: String) {
-
-        //todo check if the username exists in the realtime database then perform login
+        pb_sign_in.visible(true)
         mAuth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener {
 
@@ -127,19 +106,16 @@ class SignIn : Fragment() {
                         }
 
                         override fun onCancelled(error: DatabaseError) {
-                            activity?.toast("EWOOO!!!")
                         }
                     }
                     usr_info.addListenerForSingleValueEvent(usrInfoListener)
-                    pb_sign_in.visibility = View.GONE
+                    pb_sign_in.visible(false)
                     activity?.login()
-
-
 
                 } else {
                     it.exception?.message?.let {
+                        pb_sign_in.visible(false)
                         activity?.toast(it)
-                        pb_sign_in.visibility = View.GONE
                     }
                 }
             }

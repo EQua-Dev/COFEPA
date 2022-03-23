@@ -51,7 +51,7 @@ class Verify : Fragment() {
 
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = fragmentManager?.let { MyPagerAdapter(activity, it,  tabLayout.tabCount) }
+        val adapter = childFragmentManager?.let { MyPagerAdapter(activity, it,  tabLayout.tabCount) }
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 

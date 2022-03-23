@@ -23,6 +23,7 @@ import com.androidstrike.cofepa.models.User
 import com.androidstrike.cofepa.utils.Common
 import com.androidstrike.cofepa.utils.Common.feeToPayHash
 import com.androidstrike.cofepa.utils.toast
+import com.androidstrike.cofepa.utils.visible
 import com.androidstrike.cofepa.viewholders.FeesViewHolder
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.*
@@ -54,9 +55,6 @@ class Payment : Fragment(), View.OnClickListener {
     var tuitionFee: Int? = null
     var dueTotal: String? = null
 
-    var cstmTitle: String? = null
-
-    //    lateinit var iFirebaseLoadDone: IFirebaseLoadDone
     lateinit var selectedSemester: String
 
 
@@ -81,6 +79,9 @@ class Payment : Fragment(), View.OnClickListener {
     }
 
     private fun loadFeesCost() {
+
+        pb_payment.visible(true)
+        rl_payment.isClickable = false
         database = FirebaseDatabase.getInstance()
 //        query = database
 //            .getReference("Fees/${Common.student_department}/$selectedSemester")
@@ -103,6 +104,7 @@ class Payment : Fragment(), View.OnClickListener {
                     layout_medic.visibility = View.GONE
                     layout_security.visibility = View.GONE
                     layout_sports.visibility = View.GONE
+
                     tv_fee_accommodation.text = feesModel!!.accommodation
                     tv_fee_lib_equip.text = feesModel?.libraryEquipment
                     tv_fee_psa.text = feesModel?.psa
@@ -118,8 +120,13 @@ class Payment : Fragment(), View.OnClickListener {
                     portalFee = tv_fee_portal.text.toString().toInt()
                     tuitionFee = tv_fee_tuition.text.toString().toInt()
 
+                    pb_payment.visible(false)
+                    rl_payment.isClickable = true
 
                 } else {
+
+                    pb_payment.visible(true)
+                    rl_payment.isClickable = true
 
                     tv_fee_acceptance.text = feesModel?.acceptance
                     tv_fee_accommodation.text = feesModel?.accommodation
@@ -148,20 +155,18 @@ class Payment : Fragment(), View.OnClickListener {
                     sportsFee = tv_fee_sports.text.toString().toInt()
                     tuitionFee = tv_fee_tuition.text.toString().toInt()
 
-
+                    pb_payment.visible(false)
                 }
 
             }
 
             override fun onCancelled(error: DatabaseError) {
+                pb_payment.visible(false)
                 activity?.toast(error.message)
             }
 
         }
         query.addListenerForSingleValueEvent(feesListener)
-
-//        showCheckedTotal()
-        Log.d("EQUA", "showCheckedTotal: called")
 
         layout_acceptance.setOnClickListener(this)
         layout_accommodation.setOnClickListener(this)
@@ -175,7 +180,7 @@ class Payment : Fragment(), View.OnClickListener {
         layout_sports.setOnClickListener(this)
         layout_tuition.setOnClickListener(this)
 
-        pb_payment.visibility = View.GONE
+//        pb_payment.visibility = View.GONE
 
     }
 
@@ -197,7 +202,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (acceptanceFee != null) {
                         checkedItemTotal -= acceptanceFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_acceptance.text.toString(), acceptanceFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_acceptance.text.toString(), acceptanceFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -217,7 +224,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (accommodationFee != null) {
                         checkedItemTotal -= accommodationFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_accommodation.text.toString(), accommodationFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_accommodation.text.toString(), accommodationFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -238,7 +247,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (examFee != null) {
                         checkedItemTotal -= examFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_exams.text.toString(), examFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_exams.text.toString(), examFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -259,7 +270,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (hazardFee != null) {
                         checkedItemTotal -= hazardFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_hazard.text.toString(), hazardFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_hazard.text.toString(), hazardFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -280,7 +293,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (libEquipFee != null) {
                         checkedItemTotal -= libEquipFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_lib_and_equip.text.toString(), libEquipFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_lib_and_equip.text.toString(), libEquipFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -301,7 +316,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (medicFee != null) {
                         checkedItemTotal -= medicFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_med_treat.text.toString(), medicFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_med_treat.text.toString(), medicFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -322,7 +339,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (psaFee != null) {
                         checkedItemTotal -= psaFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_psa.text.toString(), psaFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_psa.text.toString(), psaFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -343,7 +362,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (portalFee != null) {
                         checkedItemTotal -= portalFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_portal.text.toString(), portalFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_portal.text.toString(), portalFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -364,7 +385,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (securityFee != null) {
                         checkedItemTotal -= securityFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_security.text.toString(), securityFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_security.text.toString(), securityFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -385,7 +408,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (sportsFee != null) {
                         checkedItemTotal -= sportsFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_sports.text.toString(), sportsFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_sports.text.toString(), sportsFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }
@@ -406,7 +431,9 @@ class Payment : Fragment(), View.OnClickListener {
                     if (tuitionFee != null) {
                         checkedItemTotal -= tuitionFee!!
                         tv_paying_fee.text = "$checkedItemTotal"
-                        feeToPayHash.remove(txt_tuition.toString(), tuitionFee!!)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            feeToPayHash.remove(txt_tuition.toString(), tuitionFee!!)
+                        }
                     }
                     activity?.toast("${checkedItemTotal.toString()} Checked")
                 }

@@ -7,22 +7,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.auth.SignUp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_baseline_person_add_24"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/black"/>
+        android:layout_gravity="center_horizontal" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:id="@+id/cv_sign_up"
-        android:elevation="4dp">
+        app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,44 +49,70 @@
             android:inputType="textEmailAddress"
             android:drawableStart="@drawable/ic_baseline_email_24" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
-
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableLeft="@drawable/ic_baseline_lock_24"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
                     android:hint="@string/hint_new_password"
                     android:id="@+id/et_new_password"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:drawableLeft="@drawable/ic_baseline_lock_24" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="@string/hint_new_confirm_password"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
+                    android:drawableLeft="@drawable/ic_baseline_lock_24"
                     android:id="@+id/et_new_confirm_password"
                     android:inputType="textPassword"/>
 
-            </LinearLayout>
-
-            <Spinner
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_input_layout_dept"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:padding="15dp"
-                android:id="@+id/spinner_department"/>
+                app:boxStrokeColor="@color/purple_500">
 
-            <Spinner
+                <AutoCompleteTextView
+                    android:id="@+id/auto_complete_tv_dept"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="none"
+                    android:layout_margin="8dp"
+                    android:hint="@string/department_select" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_input_layout_level"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:padding="15dp"
-                android:id="@+id/spinner_level"/>
+                app:boxStrokeColor="@color/purple_500">
+
+                <AutoCompleteTextView
+                    android:id="@+id/auto_complete_tv_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="none"
+                    android:layout_margin="8dp"
+                    android:hint="@string/level_select" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <Spinner-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:spinnerMode="dialog"-->
+<!--                android:padding="15dp"-->
+<!--                android:id="@+id/spinner_department"/>-->
+
+<!--            <Spinner-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:spinnerMode="dialog"-->
+<!--                android:padding="15dp"-->
+<!--                android:id="@+id/spinner_level"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -115,27 +143,32 @@
 
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/button_sign_up"
-        android:layout_below="@id/cv_sign_up"
-        android:id="@+id/button_sign_up"/>
+        <Button
+            android:id="@+id/button_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/button_sign_up" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_login_instead"
-        android:layout_below="@id/button_sign_up"
         android:id="@+id/tv_login_instead"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="4dp"/>
 
-    <include
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:id="@+id/pb_sign_up"
-        android:visibility="gone"
-        layout="@layout/pb_layout"/>
+        android:visibility="invisible"/>
 
 </RelativeLayout>
+
+

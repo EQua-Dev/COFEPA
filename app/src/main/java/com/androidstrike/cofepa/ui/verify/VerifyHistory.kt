@@ -160,7 +160,7 @@ class VerifyHistory : Fragment() {
 
         val customTV = dialog.findViewById(R.id.hash_txt_view) as TextView
         val customBtn = dialog.findViewById(R.id.copy_button) as Button
-        val customCTV = dialog.findViewById(R.id.message_textview) as TextView
+//        val customCTV = dialog.findViewById(R.id.message_textview) as TextView
 
         customTV.text = referenceHash
 
@@ -168,9 +168,9 @@ class VerifyHistory : Fragment() {
         customBtn.setOnClickListener {
             lifecycleScope.launch {
                 copyToClipboard(referenceHash)
-                customCTV.animate().translationY(80f).duration = 200L
-                delay(2000L)
-                customCTV.animate().translationY(-80f).duration = 200L
+//                customCTV.animate().translationY(80f).duration = 200L
+//                delay(2000L)
+//                customCTV.animate().translationY(-80f).duration = 200L
                 activity?.toast("Copied!")
 //                applyAnimation()
             }

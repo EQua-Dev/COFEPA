@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.auth.SignIn">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -15,20 +15,18 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="100dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="64dp"
-            android:src="@drawable/ic_baseline_person_outline_24"
-            app:civ_border_color="@color/black"
-            app:civ_border_width="2dp" />
+            android:src="@drawable/ic_baseline_person_outline_24" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_margin="16dp"
-            android:id="@+id/cv_login"
-            android:elevation="4dp">
+            android:padding="8dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,31 +35,22 @@
                 android:orientation="vertical">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/et_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_baseline_person_outline_24"
-                    android:hint="@string/hint_new_user_name"
-                    android:inputType="text"
-                    android:drawableStart="@drawable/ic_baseline_person_outline_24" />
-
-                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_email_24"
                     android:drawableLeft="@drawable/ic_baseline_email_24"
                     android:hint="@string/hint_new_email"
-                    android:inputType="textEmailAddress"
-                    android:drawableStart="@drawable/ic_baseline_email_24" />
+                    android:inputType="textEmailAddress" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
                     android:drawableLeft="@drawable/ic_baseline_lock_24"
                     android:hint="@string/hint_new_password"
-                    android:inputType="textPassword"
-                    android:drawableStart="@drawable/ic_baseline_lock_24" />
+                    android:inputType="textPassword" />
 
 
             </LinearLayout>
@@ -69,47 +58,38 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/button_sign_in"
             android:id="@+id/button_sign_in"
-            android:layout_below="@id/cv_login"/>
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/text_new_account"
-            android:textAlignment="center"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_margin="16dp"
+            android:text="@string/button_sign_in" />
+
+        <TextView
             android:id="@+id/tv_new_account"
-            android:layout_below="@id/button_sign_in"/>
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/text_forgot_password"
-            android:textAlignment="center"
-            android:gravity="center_horizontal"
             android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/text_new_account"
+            android:textAlignment="center" />
+
+        <TextView
             android:id="@+id/tv_forgot_password"
-            android:layout_below="@id/tv_new_account"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/text_forgot_password"
+            android:textAlignment="center" />
 
 
-<!--        <ProgressBar-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:visibility="invisible"-->
-<!--            android:id="@+id/progress_sign_in"/>-->
+    </LinearLayout>
 
-
-    </RelativeLayout>
-
-    <include
+    <ProgressBar
         android:id="@+id/pb_sign_in"
-        android:visibility="gone"
-        layout="@layout/pb_layout"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
 
-</LinearLayout>
+</RelativeLayout>
